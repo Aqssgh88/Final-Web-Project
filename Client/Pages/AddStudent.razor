@@ -1,0 +1,77 @@
+﻿@using FinalProject.Shared
+@inject HttpClient HttpClient
+
+@page "/Add"
+<div class="wrapper rounded bg-white">
+
+    <div class="h3">Registration Form</div>
+
+    <EditForm class="form" Model="@obj" OnValidSubmit="@SubmitForm">
+        <div class="row">
+            <div class="col-md-6 mt-md-0 mt-3">
+                <label>First Name</label>
+                <InputText @bind-Value="@obj.FirstName" class="form-control" required></InputText>
+            </div>
+            <div class="col-md-6 mt-md-0 mt-3">
+                <label>Last Name</label>
+                <InputText @bind-Value="@obj.LastName"  class="form-control" required></InputText>
+            </div>
+        </div>
+       <div class="row">
+            <div class="col-md-6 mt-md-0 mt-3">
+                <label>Gender</label>
+                <div class="d-flex align-items-center mt-2">
+                    <label class="option">
+                        <input type="radio" name="radio">Male
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="option ms-4">
+                        <input type="radio" name="radio">Female
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mt-md-0 mt-3">
+                <label>Email</label>
+                <InputText @bind-Value="@obj.Email" class="form-control" required></InputText>
+            </div>
+            <div class="col-md-6 mt-md-0 mt-3">
+                <label>Age</label>
+                <input @bind-value="obj.Age" type="tel" class="form-control" required>
+            </div>
+        </div>
+        <div class=" my-md-2 my-3">
+            <label>Education</label>
+            <InputSelect @bind-Value="obj.HighEducation" id="sub" required>
+                <option value="" selected hidden>Choose Option</option>
+                <option value="10th">10th</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="BS">BS</option>
+                <option value="MS">MS</option>
+            </InputSelect>
+        </div>
+        <div class="btn btn-primary mt-3">Submit</div>
+    </EditForm>
+
+</div>
+@code {
+    public DTO obj = new DTO();
+
+    public async void SubmitForm()
+    {
+        var response = await HttpClient.PostAsJsonAsync(Constants.baseApiUrl + "/api/Student/Add", obj);
+
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("User added successfully!");
+        }
+        else
+        {
+            Console.WriteLine($"Error: {response.StatusCode}");
+        }
+    }
+
+}
